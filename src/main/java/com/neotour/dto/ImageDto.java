@@ -1,0 +1,4 @@
+package com.neotour.dto;
+
+public class ImageDto {
+}
