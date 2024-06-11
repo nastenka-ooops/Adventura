@@ -2,6 +2,8 @@ package com.neotour.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tour")
 public class Tour {
@@ -14,7 +16,24 @@ public class Tour {
     private String description;
     @Column(nullable = false, name = "booked_amount")
     private int bookedAmount;
-    //TODO add Location and Image
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false, name = "location_id", referencedColumnName = "id")
+    private Location location;
+
+    @OneToMany
+    @JoinTable(
+            name = "tour_image",
+            joinColumns = @JoinColumn (name = "tour_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "tour")
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "tour")
+    private List<Booking> bookings;
 
     public Long getId() {
         return id;
@@ -46,5 +65,37 @@ public class Tour {
 
     public void setBookedAmount(int bookedAmount) {
         this.bookedAmount = bookedAmount;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }
