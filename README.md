@@ -7,5 +7,12 @@ It is an app for exploring travel tours around the world. NeoTour is an online s
 
 ![ERD](https://github.com/nastenka-ooops/NeoTour/blob/main/diagrams/ERD.png)
 
+## Deployment
+
+[NeoTour](https://neotour-production-392c.up.railway.app/)
+
+## Documentation
+[Documentation](https://neotour-production-392c.up.railway.app/swagger-ui/index.html)
+
 ## Author
 - *Developer* - [Brytskaya Anastasia](https://github.com/nastenka-ooops)
