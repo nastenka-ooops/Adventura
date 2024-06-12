@@ -24,6 +24,6 @@ public class TourService {
 
     public List<TourListDto> getAllTours() {
         return tourRepository.findAll().stream()
-                .map(TourListMapper::mapToTourListDto).toList();
+                .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
     }
 }

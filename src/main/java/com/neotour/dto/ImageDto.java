@@ -1,4 +1,8 @@
 package com.neotour.dto;
 
-public class ImageDto {
+public record ImageDto(
+        Long id,
+        String name,
+        String url
+) {
 }

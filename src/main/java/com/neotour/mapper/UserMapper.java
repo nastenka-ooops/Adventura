@@ -4,7 +4,7 @@ import com.neotour.dto.UserDto;
 import com.neotour.entity.User;
 
 public class UserMapper {
-    public static UserDto mapUserToUserDto(User user) {
+    public static UserDto mapToUserDto(User user) {
         return new UserDto();
     }
 }
