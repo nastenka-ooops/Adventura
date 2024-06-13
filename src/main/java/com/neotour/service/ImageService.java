@@ -36,9 +36,7 @@ public class ImageService {
         );
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
 
-        Image image = new Image();
-        image.setName(file.getOriginalFilename());
-        image.setUrl(uploadResult.get("url").toString());
+        Image image = new Image(file.getOriginalFilename(), uploadResult.get("url").toString());
 
         Image savedImage = imageRepository.save(image);
 

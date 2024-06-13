@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,5 +26,9 @@ public class TourService {
     public List<TourListDto> getAllTours() {
         return tourRepository.findAll().stream()
                 .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
+    }
+
+    public Optional<TourDto> getTourById(Long id) {
+        return tourRepository.findById(id).map(TourMapper::mapToTourDto);
     }
 }

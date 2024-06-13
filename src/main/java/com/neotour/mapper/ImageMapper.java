@@ -11,4 +11,8 @@ public class ImageMapper {
                 image.getUrl()
         );
     }
+
+    public static Image mapToImageEntity(ImageDto imageDto) {
+        return new Image(imageDto.name(), imageDto.url());
+    }
 }

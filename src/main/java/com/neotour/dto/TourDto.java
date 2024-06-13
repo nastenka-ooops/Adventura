@@ -10,6 +10,6 @@ public record TourDto(
         String location,
         String country,
         List<String> images,
-        List<ReviewDto> reviewDtos
+        List<ReviewDto> reviews
 ) {
 }

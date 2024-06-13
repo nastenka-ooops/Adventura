@@ -1,5 +1,6 @@
 package com.neotour.controller;
 
+import com.neotour.dto.TourDto;
 import com.neotour.dto.TourListDto;
 import com.neotour.service.TourService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,11 +9,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tours")
@@ -36,5 +36,13 @@ public class TourController {
     public ResponseEntity<List<TourListDto>> getAllTours() {
         List<TourListDto> tours = tourService.getAllTours();
         return ResponseEntity.ok(tours);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TourDto> getTourById(@PathVariable Long id) {
+        Optional<TourDto> customerDto = tourService.getTourById(id);
+        return customerDto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

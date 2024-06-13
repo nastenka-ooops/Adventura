@@ -1,5 +1,10 @@
 package com.neotour.dto;
 
-public class UserDto {
+import java.util.List;
 
-}
+public record UserDto(
+        Long id,
+        String username,
+        String password
+        //List<ImageDto> images
+){}

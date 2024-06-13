@@ -3,6 +3,7 @@ package com.neotour.controller;
 import com.cloudinary.utils.ObjectUtils;
 import com.neotour.dto.ImageDto;
 import com.neotour.service.ImageService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,6 +58,7 @@ public class ImageController {
         }
     }
 
+    @Hidden
     @GetMapping("")
     public ResponseEntity<List<ImageDto>> getAllImages() {
         List<ImageDto> imageDtos = imageService.getAllImages();
