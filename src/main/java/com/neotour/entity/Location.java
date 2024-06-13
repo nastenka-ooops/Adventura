@@ -15,6 +15,7 @@ public class Location {
     @Column(nullable = false)
     private String country;
     @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Continent continent;
 
     @OneToMany(mappedBy = "location")

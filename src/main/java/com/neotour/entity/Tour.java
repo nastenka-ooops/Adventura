@@ -1,5 +1,6 @@
 package com.neotour.entity;
 
+import com.neotour.service.Season;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class Tour {
     private String description;
     @Column(nullable = false, name = "booked_amount")
     private int bookedAmount;
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Season recommendedSeason;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, name = "location_id", referencedColumnName = "id")
@@ -97,5 +101,13 @@ public class Tour {
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    public Season getRecommendedSeason() {
+        return recommendedSeason;
+    }
+
+    public void setRecommendedSeason(Season recommendedSeason) {
+        this.recommendedSeason = recommendedSeason;
     }
 }

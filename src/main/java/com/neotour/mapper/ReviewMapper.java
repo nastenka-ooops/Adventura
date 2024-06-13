@@ -8,7 +8,6 @@ public class ReviewMapper {
         return new ReviewDto(
                 review.getId(),
                 review.getReview(),
-                TourMapper.mapToTourDto(review.getTour()),
                 UserMapper.mapToUserDto(review.getUser())
         );
     }

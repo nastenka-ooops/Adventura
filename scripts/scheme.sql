@@ -18,7 +18,8 @@ create table tour
     booked_amount integer      not null,
     location_id   integer      not null
         constraint tour_location_id_fk
-            references location
+            references location,
+    recommended_season integer default 2 not null
 );
 create table "user"
 (
