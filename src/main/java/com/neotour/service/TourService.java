@@ -43,4 +43,9 @@ public class TourService {
         return tourRepository.findByRecommendedSeason(currentSeason).stream()
                 .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
     }
+
+    public List<TourListDto> findMostVisitedTours() {
+        return tourRepository.findAllOrderByBookedAmountDesc().stream()
+                .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
+    }
 }

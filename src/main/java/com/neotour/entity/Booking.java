@@ -10,7 +10,6 @@ public class Booking {
     private Long id;
     @Column(nullable = false)
     private String phone;
-    @Column(nullable = false)
     private String comment;
 
     @ManyToOne

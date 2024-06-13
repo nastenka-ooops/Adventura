@@ -65,4 +65,15 @@ public class TourController {
         List<TourListDto> tours =  tourService.findRecommendedToursByCurrentSeason();
         return ResponseEntity.ok(tours);
     }
+
+    @Operation(summary = "Get most visited tours", description = "Retrieve a list of the most visited tours.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of most visited tours returned successfully"),
+            @ApiResponse(responseCode = "404", description = "No tours found", content = @Content),
+    })
+    @GetMapping("/mostVisited")
+    public ResponseEntity<List<TourListDto>> getMostVisitedTours() {
+        List<TourListDto> tours = tourService.findMostVisitedTours();
+        return ResponseEntity.ok(tours);
+    }
 }

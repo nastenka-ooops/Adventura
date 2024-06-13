@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +48,9 @@ public class ReviewService {
             return ReviewMapper.mapToReviewDto(savedReview);
         }
         return null;
+    }
+
+    public List<ReviewDto> getReviewsByTourId(Long tourId) {
+        return reviewRepository.findByTourId(tourId).stream().map(ReviewMapper::mapToReviewDto).toList();
     }
 }
