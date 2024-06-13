@@ -30,21 +30,25 @@ public class ImageService {
         this.cloudinary = cloudinary;
     }
 
-    public ImageDto uploadImage(MultipartFile file) throws IOException {
+    public Image uploadImage(MultipartFile file) {
         Map params = ObjectUtils.asMap(
                 "folder", "NeoTour"
         );
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
+        Map uploadResult = null;
+        try {
+            uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
+        } catch (IOException e) {
+            return null;
+        }
 
         Image image = new Image(file.getOriginalFilename(), uploadResult.get("url").toString());
 
-        Image savedImage = imageRepository.save(image);
-
-        return new ImageDto(
+        return imageRepository.save(image);
+       /* return new ImageDto(
                 savedImage.getId(),
                 savedImage.getName(),
                 savedImage.getUrl()
-        );
+        );*/
     }
 
     public List<ImageDto> getAllImages() {

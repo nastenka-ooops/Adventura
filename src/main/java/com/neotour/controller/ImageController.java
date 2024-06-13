@@ -2,6 +2,7 @@ package com.neotour.controller;
 
 import com.cloudinary.utils.ObjectUtils;
 import com.neotour.dto.ImageDto;
+import com.neotour.entity.Image;
 import com.neotour.service.ImageService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,14 +32,10 @@ public class ImageController {
 
     @Operation(summary = "Upload Image to Cloudinary", description = "Uploads an image file to Cloudinary and saves it in the database.")
     @PostMapping("/upload")
-    public ResponseEntity<ImageDto> uploadImage(
+    public ResponseEntity<Image> uploadImage(
             @Parameter(description = "Image file to upload", required = true) @RequestParam("file") MultipartFile file) {
-         try {
-            ImageDto imageDto = imageService.uploadImage(file);
-            return ResponseEntity.ok(imageDto);
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body(null);
-        }
+        Image imageDto = imageService.uploadImage(file);
+        return ResponseEntity.ok(imageDto);
     }
 
     @Operation(summary = "Download Images from Cloudinary",
