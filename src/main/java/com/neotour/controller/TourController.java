@@ -2,7 +2,7 @@ package com.neotour.controller;
 
 import com.neotour.dto.TourDto;
 import com.neotour.dto.TourListDto;
-import com.neotour.entity.Continent;
+import com.neotour.enums.Continent;
 import com.neotour.service.TourService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,5 +1,6 @@
 package com.neotour.entity;
 
+import com.neotour.enums.Continent;
 import jakarta.persistence.*;
 
 import java.util.List;

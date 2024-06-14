@@ -4,6 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.neotour.dto.ImageDto;
 import com.neotour.entity.Image;
+import com.neotour.error.ImageRetrievalException;
+import com.neotour.error.ImageUploadException;
 import com.neotour.mapper.ImageMapper;
 import com.neotour.mapper.TourListMapper;
 import com.neotour.repository.ImageRepository;
@@ -34,30 +36,38 @@ public class ImageService {
         Map params = ObjectUtils.asMap(
                 "folder", "NeoTour"
         );
-        Map uploadResult = null;
+        Map uploadResult;
         try {
             uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
         } catch (IOException e) {
-            return null;
+            throw new ImageUploadException("Failed to upload image to Cloudinary", e);
         }
 
-        Image image = new Image(file.getOriginalFilename(), uploadResult.get("url").toString());
+        String imageUrl = (String) uploadResult.get("url");
+        if (imageUrl == null) {
+            throw new ImageUploadException("Failed to retrieve URL from Cloudinary response", null);
+        }
+        Image image = new Image(file.getOriginalFilename(), imageUrl);
 
-        return imageRepository.save(image);
-       /* return new ImageDto(
-                savedImage.getId(),
-                savedImage.getName(),
-                savedImage.getUrl()
-        );*/
+        try {
+            return imageRepository.save(image);
+        } catch (Exception e) {
+            throw new ImageUploadException("Failed to save image to the repository", e);
+        }
     }
 
     public List<ImageDto> getAllImages() {
-        return imageRepository.findAll().stream()
-                .map(ImageMapper::mapToImageDto).collect(Collectors.toList());
-
+        try {
+            return imageRepository.findAll().stream()
+                    .map(ImageMapper::mapToImageDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ImageRetrievalException("Failed to retrieve images from the repository", e);
+        }
     }
 
     public List<ImageDto> downloadImagesFromCloudinary(String folder) {
+        List<ImageDto> imageDTOs = new ArrayList<>();
         try {
             Map options = ObjectUtils.asMap(
                      "type", "upload",
@@ -75,22 +85,25 @@ public class ImageService {
                 imageUrls.add(imageUrl);
             }
 
-            List<ImageDto> imageDTOs = new ArrayList<>();
             for (String url : imageUrls) {
-                Optional<Image> existingImage = imageRepository.findByUrl(url);
-                if (existingImage.isEmpty()) {
-                    Image image = new Image();
-                    image.setName(extractFileNameFromUrl(url));
-                    image.setUrl(url);
+                try {
+                    Optional<Image> existingImage = imageRepository.findByUrl(url);
+                    if (existingImage.isEmpty()) {
+                        Image image = new Image();
+                        image.setName(extractFileNameFromUrl(url));
+                        image.setUrl(url);
 
-                    Image savedImage = imageRepository.save(image);
-                    imageDTOs.add(ImageMapper.mapToImageDto(savedImage));
+                        Image savedImage = imageRepository.save(image);
+                        imageDTOs.add(ImageMapper.mapToImageDto(savedImage));
+                    }
+                } catch (Exception e) {
+                    throw new ImageRetrievalException("Failed to download images from Cloudinary", e);
                 }
             }
-            return imageDTOs;
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new ImageRetrievalException("Failed to fetch images from Cloudinary", e);
         }
+        return imageDTOs;
     }
 
     private String extractFileNameFromUrl(String url) {

@@ -47,12 +47,8 @@ public class ImageController {
     @GetMapping("/downloadFromCloudinary")
     public ResponseEntity<List<ImageDto>> downloadImagesFromCloudinary(
         @Parameter(description = "Path of the folder in Cloudinary to download images from") @RequestParam("folder") String folder){
-            try {
-            List<ImageDto> imageDtos = imageService.downloadImagesFromCloudinary(folder);
-            return ResponseEntity.ok(imageDtos);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
-        }
+        List<ImageDto> imageDtos = imageService.downloadImagesFromCloudinary(folder);
+        return ResponseEntity.ok(imageDtos);
     }
 
     @Hidden
@@ -61,5 +57,4 @@ public class ImageController {
         List<ImageDto> imageDtos = imageService.getAllImages();
         return ResponseEntity.ok(imageDtos);
     }
-
 }

@@ -34,15 +34,10 @@ public class BookingController {
     })
     @PostMapping
     public ResponseEntity<BookingDto> createBooking(@RequestBody CreateBookingDto bookingDto) {
-        BookingDto savedBooking = bookingService.createBooking(getCurrentUser(), bookingDto);
-        if (savedBooking != null) {
-            return ResponseEntity.ok(savedBooking);
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(bookingService.createBooking(getCurrentUser(), bookingDto));
     }
 
     private static String getCurrentUser() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
 }

@@ -1,15 +1,12 @@
 package com.neotour.repository;
 
-import com.neotour.dto.TourDto;
-import com.neotour.dto.TourListDto;
-import com.neotour.entity.Continent;
+import com.neotour.enums.Continent;
 import com.neotour.entity.Tour;
-import com.neotour.service.Season;
+import com.neotour.enums.Season;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Repository

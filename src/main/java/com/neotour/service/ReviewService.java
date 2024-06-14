@@ -5,16 +5,16 @@ import com.neotour.dto.ReviewDto;
 import com.neotour.entity.AppUser;
 import com.neotour.entity.Review;
 import com.neotour.entity.Tour;
+import com.neotour.error.ReviewCreationException;
+import com.neotour.error.TourNotFoundException;
+import com.neotour.error.UserNotFoundException;
 import com.neotour.mapper.ReviewMapper;
-import com.neotour.mapper.TourMapper;
 import com.neotour.repository.ReviewRepository;
 import com.neotour.repository.TourRepository;
 import com.neotour.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,24 +33,32 @@ public class ReviewService {
     }
 
     public ReviewDto createReview(String username, CreateReviewDto reviewDto) {
-        Review review = new Review();
+        try {
+            Optional<AppUser> user = userRepository.findByUsername(username);
+            Optional<Tour> tour = tourRepository.findById(reviewDto.tourId());
 
-        Optional<AppUser> user = userRepository.findByUsername(username);
-        Optional<Tour> tour = tourRepository.findById(reviewDto.tourId());
+            if (user.isEmpty()) {
+                throw new UserNotFoundException("User with username " + username + " not found");
+            }
+            if (tour.isEmpty()) {
+                throw new TourNotFoundException("Tour with ID " + reviewDto.tourId() + " not found");
+            }
 
-        Review savedReview;
 
-        if (user.isPresent() && tour.isPresent()) {
+            Review review = new Review();
             review.setReview(reviewDto.review());
             review.setUser(user.get());
             review.setTour(tour.get());
-            savedReview = reviewRepository.save(review);
+            Review savedReview = reviewRepository.save(review);
             return ReviewMapper.mapToReviewDto(savedReview);
+        }catch (Exception e){
+            throw new ReviewCreationException("Failed to create review", e);
         }
-        return null;
     }
 
     public List<ReviewDto> getReviewsByTourId(Long tourId) {
-        return reviewRepository.findByTourId(tourId).stream().map(ReviewMapper::mapToReviewDto).toList();
+        return reviewRepository.findByTourId(tourId)
+                .stream().map(ReviewMapper::mapToReviewDto)
+                .toList();
     }
 }

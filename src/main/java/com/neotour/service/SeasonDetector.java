@@ -1,5 +1,7 @@
 package com.neotour.service;
 
+import com.neotour.enums.Season;
+
 import java.time.LocalDate;
 import java.time.Month;
 

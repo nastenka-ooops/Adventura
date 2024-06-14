@@ -42,19 +42,11 @@ public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))
             )
             @RequestPart(name = "user") @Valid String userDto,
-
             @Parameter(
                     description = "Optional profile picture for the user",
                     content = @Content(mediaType = "image/jpeg")
             )
-            @RequestPart(name = "file", required = false) MultipartFile file
-    ) {     UserDto createdUser = userService.createUser(userDto, file);
-        if (createdUser != null) {
-            return ResponseEntity.ok(createdUser);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+            @RequestPart(name = "file", required = false) MultipartFile file){
+        return ResponseEntity.ok(userService.createUser(userDto, file));
     }
-
-
 }

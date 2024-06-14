@@ -40,11 +40,7 @@ public class ReviewController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Data for the new review",
                     required = true, content = @Content(schema = @Schema(implementation = CreateReviewDto.class)))
             @RequestBody CreateReviewDto reviewDto) {
-        ReviewDto savedReview = reviewService.createReview(getCurrentUser(), reviewDto);
-        if (savedReview != null) {
-            return ResponseEntity.ok(savedReview);
-        }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(reviewService.createReview(getCurrentUser(), reviewDto));
     }
 
 

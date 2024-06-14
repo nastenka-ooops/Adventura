@@ -4,14 +4,16 @@ import com.neotour.dto.BookingDto;
 import com.neotour.dto.CreateBookingDto;
 import com.neotour.entity.AppUser;
 import com.neotour.entity.Booking;
-import com.neotour.entity.Review;
 import com.neotour.entity.Tour;
+import com.neotour.error.BookingCreationException;
+import com.neotour.error.TourNotFoundException;
+import com.neotour.error.TourUpdateException;
+import com.neotour.error.UserNotFoundException;
 import com.neotour.mapper.BookingMapper;
 import com.neotour.repository.BookingRepository;
 import com.neotour.repository.TourRepository;
 import com.neotour.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,26 +35,39 @@ public class BookingService {
     public BookingDto createBooking(String username, CreateBookingDto bookingDto) {
         Booking booking = new Booking();
 
-        Optional<AppUser> user = userRepository.findByUsername(username);
-        Optional<Tour> tour = tourRepository.findById(bookingDto.tourId());
+        Optional<AppUser> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException("User with username " + username + " not found");
+        }
+        AppUser user = userOptional.get();
+
+        Optional<Tour> tourOptional = tourRepository.findById(bookingDto.tourId());
+        if (tourOptional.isEmpty()) {
+            throw new TourNotFoundException("Tour with ID " + bookingDto.tourId() + " not found");
+        }
+        Tour tour = tourOptional.get();
+
+        booking.setPhone(bookingDto.phone());
+        booking.setComment(bookingDto.comment());
+        booking.setPeopleAmount(bookingDto.people_amount());
+        booking.setUser(user);
+        booking.setTour(tour);
 
         Booking savedBooking;
-
-        if (user.isPresent() && tour.isPresent()) {
-            booking.setPhone(bookingDto.phone());
-            booking.setComment(bookingDto.comment());
-            booking.setPeopleAmount(bookingDto.people_amount());
-            booking.setUser(user.get());
-            booking.setTour(tour.get());
-
+        try {
             savedBooking = bookingRepository.save(booking);
-
-            tour.get().setBookedAmount(tour.get().getBookedAmount()+1);
-            tourRepository.save(tour.get());
-
-            return BookingMapper.mapToBookingDto(savedBooking);
+        } catch (Exception e) {
+            throw new BookingCreationException("Error occurred while saving the booking", e);
         }
-        return null;
+
+        try {
+            tour.setBookedAmount(tour.getBookedAmount() + 1);
+            tourRepository.save(tour);
+        } catch (Exception e) {
+            throw new TourUpdateException("Error occurred while updating the tour", e);
+        }
+
+        return BookingMapper.mapToBookingDto(savedBooking);
     }
 }
 

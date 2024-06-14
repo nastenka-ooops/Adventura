@@ -1,5 +1,6 @@
 package com.neotour.entity;
 
+import com.neotour.enums.RoleEnum;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 

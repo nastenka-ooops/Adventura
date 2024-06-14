@@ -1,7 +1,7 @@
 package com.neotour.repository;
 
 import com.neotour.entity.Role;
-import com.neotour.entity.RoleEnum;
+import com.neotour.enums.RoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
