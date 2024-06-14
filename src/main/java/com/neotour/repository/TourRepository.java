@@ -18,4 +18,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
     List<Tour> findByRecommendedSeason(Season season);
     @Query("SELECT t FROM Tour t ORDER BY t.bookedAmount DESC")
     List<Tour> findAllOrderByBookedAmountDesc();
+    @Query("SELECT t FROM Tour t ORDER BY t.visitedAmount DESC")
+    List<Tour> findAllOrderByVisitedAmountDesc();
+    List<Tour> findAllByFeaturedIsTrue();
 }

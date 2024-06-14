@@ -41,6 +41,7 @@ public class BookingService {
         if (user.isPresent() && tour.isPresent()) {
             booking.setPhone(bookingDto.phone());
             booking.setComment(bookingDto.comment());
+            booking.setPeopleAmount(bookingDto.people_amount());
             booking.setUser(user.get());
             booking.setTour(tour.get());
 

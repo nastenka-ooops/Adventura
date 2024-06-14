@@ -30,7 +30,12 @@ public class TourService {
     }
 
     public Optional<TourDto> getTourById(Long id) {
-        return tourRepository.findById(id).map(TourMapper::mapToTourDto);
+        Optional<Tour> tour = tourRepository.findById(id);
+        if (tour.isPresent()) {
+            tour.get().setVisitedAmount(tour.get().getVisitedAmount() + 1);
+            tourRepository.save(tour.get());
+        }
+        return tour.map(TourMapper::mapToTourDto);
     }
 
     public List<TourListDto> findToursByContinent(Continent continent) {
@@ -46,6 +51,16 @@ public class TourService {
 
     public List<TourListDto> findMostVisitedTours() {
         return tourRepository.findAllOrderByBookedAmountDesc().stream()
+                .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
+    }
+
+    public List<TourListDto> findPopularTours() {
+        return tourRepository.findAllOrderByVisitedAmountDesc().stream()
+                .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
+    }
+
+    public List<TourListDto> findFeaturedTours() {
+        return tourRepository.findAllByFeaturedIsTrue().stream()
                 .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
     }
 }

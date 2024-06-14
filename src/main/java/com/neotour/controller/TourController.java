@@ -7,8 +7,10 @@ import com.neotour.service.TourService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tours")
+@Tag(name = "Tour Controller", description = "Operations related to tours")
 public class TourController {
 
     private final TourService tourService;
@@ -74,6 +77,34 @@ public class TourController {
     @GetMapping("/mostVisited")
     public ResponseEntity<List<TourListDto>> getMostVisitedTours() {
         List<TourListDto> tours = tourService.findMostVisitedTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Operation(summary = "Get popular tours", description = "Fetches a list of the most popular tours")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourListDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @GetMapping("/popular")
+    public ResponseEntity<List<TourListDto>> getPopularTours() {
+        List<TourListDto> tours = tourService.findPopularTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Operation(summary = "Get featured tours", description = "Fetches a list of the featured tours")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourListDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @GetMapping("/featured")
+    public ResponseEntity<List<TourListDto>> getFeaturedTours() {
+        List<TourListDto> tours = tourService.findFeaturedTours();
         return ResponseEntity.ok(tours);
     }
 }

@@ -6,7 +6,6 @@ public record TourDto(
         Long id,
         String name,
         String description,
-        int bookedAmount,
         String location,
         String country,
         List<String> images,

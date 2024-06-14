@@ -12,7 +12,6 @@ public class TourMapper {
                 tour.getId(),
                 tour.getName(),
                 tour.getDescription(),
-                tour.getBookedAmount(),
                 tour.getLocation().getLocation(),
                 tour.getLocation().getCountry(),
                 tour.getImages().stream().map(Image::getUrl).toList(),

@@ -9,6 +9,7 @@ public class BookingMapper {
                 booking.getId(),
                 booking.getPhone(),
                 booking.getComment() != null ? booking.getComment() : "",
+                booking.getPeopleAmount(),
                 booking.getUser().getUsername(),
                 booking.getTour().getId()
         );

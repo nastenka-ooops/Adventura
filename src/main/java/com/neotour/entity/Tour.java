@@ -17,7 +17,11 @@ public class Tour {
     private String description;
     @Column(nullable = false, name = "booked_amount")
     private int bookedAmount;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "visited_amount")
+    private int visitedAmount;
+    @Column(nullable = false, name = "is_featured")
+    private Boolean featured;
+    @Column(nullable = false, name = "recommended_season")
     @Enumerated(EnumType.ORDINAL)
     private Season recommendedSeason;
 
@@ -69,6 +73,22 @@ public class Tour {
 
     public void setBookedAmount(int bookedAmount) {
         this.bookedAmount = bookedAmount;
+    }
+
+    public int getVisitedAmount() {
+        return visitedAmount;
+    }
+
+    public void setVisitedAmount(int visited_amount) {
+        this.visitedAmount = visited_amount;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
     }
 
     public Location getLocation() {

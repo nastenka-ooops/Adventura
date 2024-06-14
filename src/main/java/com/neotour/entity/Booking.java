@@ -11,7 +11,8 @@ public class Booking {
     @Column(nullable = false)
     private String phone;
     private String comment;
-
+    @Column(nullable = false, name = "people_amount")
+    private int peopleAmount;
     @ManyToOne
     @JoinColumn(name = "tour_id")
     private Tour tour;
@@ -42,6 +43,14 @@ public class Booking {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getPeopleAmount() {
+        return peopleAmount;
+    }
+
+    public void setPeopleAmount(int peopleAmount) {
+        this.peopleAmount = peopleAmount;
     }
 
     public Tour getTour() {
