@@ -3,7 +3,10 @@ package com.neotour.controller;
 import com.neotour.dto.TourDto;
 import com.neotour.dto.TourListDto;
 import com.neotour.enums.Continent;
+import com.neotour.enums.TourCategory;
+import com.neotour.error.InvalidCategoryException;
 import com.neotour.service.TourService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +33,7 @@ public class TourController {
         this.tourService = tourService;
     }
 
+    @Hidden
     @Operation(summary = "Get all tours", description = "Retrieve a list of all tours")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
@@ -52,6 +56,7 @@ public class TourController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Hidden
     @Operation(summary = "Get tours by continent", description = "Retrieve a list of tours based on the specified continent.")
     @GetMapping("/by-continent/{continent}")
     public ResponseEntity<List<TourListDto>> getToursByContinent(
@@ -60,6 +65,7 @@ public class TourController {
         return ResponseEntity.ok(tours);
     }
 
+    @Hidden
     @Operation(summary = "Get Recommended Tours by Current Season",
             description = "Retrieves a list of recommended tours based on the current season.")
     @ApiResponse(responseCode = "200", description = "Successful operation, returns a list of tours.")
@@ -69,17 +75,19 @@ public class TourController {
         return ResponseEntity.ok(tours);
     }
 
+    @Hidden
     @Operation(summary = "Get most visited tours", description = "Retrieve a list of the most visited tours.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of most visited tours returned successfully"),
             @ApiResponse(responseCode = "404", description = "No tours found", content = @Content),
     })
-    @GetMapping("/mostVisited")
+    @GetMapping("/most-visited")
     public ResponseEntity<List<TourListDto>> getMostVisitedTours() {
         List<TourListDto> tours = tourService.findMostVisitedTours();
         return ResponseEntity.ok(tours);
     }
 
+    @Hidden
     @Operation(summary = "Get popular tours", description = "Fetches a list of the most popular tours")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
@@ -94,6 +102,7 @@ public class TourController {
         return ResponseEntity.ok(tours);
     }
 
+    @Hidden
     @Operation(summary = "Get featured tours", description = "Fetches a list of the featured tours")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
@@ -105,6 +114,51 @@ public class TourController {
     @GetMapping("/featured")
     public ResponseEntity<List<TourListDto>> getFeaturedTours() {
         List<TourListDto> tours = tourService.findFeaturedTours();
+        return ResponseEntity.ok(tours);
+    }
+
+
+    @Operation(summary = "Get tours by category", description = "Retrieve a list of tours based on the specified category.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourListDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid category",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @GetMapping("/by-category/{category}")
+    public ResponseEntity<List<TourListDto>> getToursByCategory(
+            @Parameter(description = "Category to filter tours by.", example = "RECOMMENDED", schema = @Schema(implementation = TourCategory.class))
+            @PathVariable TourCategory category,
+            @RequestParam(value = "continent", required = false) Continent continent) {
+
+        List<TourListDto> tours;
+
+        switch (category) {
+            case BY_CONTINENT:
+                if (continent == null) {
+                    throw new InvalidCategoryException("Continent parameter is required for BY_CONTINENT category.");
+                }
+                tours = tourService.findToursByContinent(continent);
+                break;
+            case RECOMMENDED:
+                tours = tourService.findRecommendedToursByCurrentSeason();
+                break;
+            case MOST_VISITED:
+                tours = tourService.findMostVisitedTours();
+                break;
+            case POPULAR:
+                tours = tourService.findPopularTours();
+                break;
+            case FEATURED:
+                tours = tourService.findFeaturedTours();
+                break;
+            default:
+                return ResponseEntity.badRequest().build();
+        }
+
         return ResponseEntity.ok(tours);
     }
 }

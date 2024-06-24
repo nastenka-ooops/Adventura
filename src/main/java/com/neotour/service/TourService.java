@@ -48,7 +48,7 @@ public class TourService {
     }
 
     public List<TourListDto> findToursByContinent(Continent continent) {
-        return tourRepository.findByLocation_Continent(continent).stream()
+        return tourRepository.findByLocationContinent(continent).stream()
                 .map(TourListMapper::mapToTourListDto).collect(Collectors.toList());
     }
 
