@@ -33,90 +33,6 @@ public class TourController {
         this.tourService = tourService;
     }
 
-    @Hidden
-    @Operation(summary = "Get all tours", description = "Retrieve a list of all tours")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
-            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
-    })
-    @GetMapping
-    public ResponseEntity<List<TourListDto>> getAllTours() {
-        List<TourListDto> tours = tourService.getAllTours();
-        return ResponseEntity.ok(tours);
-    }
-
-    @Operation(summary = "Get tour by ID", description = "Get tour details based on the provided tour ID.")
-    @GetMapping("/{id}")
-    public ResponseEntity<TourDto> getTourById(
-            @Parameter(description = "ID of the tour to be obtained. Cannot be empty.", example = "1") @PathVariable Long id) {
-        Optional<TourDto> customerDto = tourService.getTourById(id);
-        return customerDto.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @Hidden
-    @Operation(summary = "Get tours by continent", description = "Retrieve a list of tours based on the specified continent.")
-    @GetMapping("/by-continent/{continent}")
-    public ResponseEntity<List<TourListDto>> getToursByContinent(
-            @Parameter(description = "Continent name to filter tours by.", example = "EUROPE", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Continent.class)) @PathVariable Continent continent) {
-        List<TourListDto> tours = tourService.findToursByContinent(continent);
-        return ResponseEntity.ok(tours);
-    }
-
-    @Hidden
-    @Operation(summary = "Get Recommended Tours by Current Season",
-            description = "Retrieves a list of recommended tours based on the current season.")
-    @ApiResponse(responseCode = "200", description = "Successful operation, returns a list of tours.")
-    @GetMapping("/recommended")
-    public ResponseEntity<List<TourListDto>> getRecommendedToursByCurrentSeason() {
-        List<TourListDto> tours =  tourService.findRecommendedToursByCurrentSeason();
-        return ResponseEntity.ok(tours);
-    }
-
-    @Hidden
-    @Operation(summary = "Get most visited tours", description = "Retrieve a list of the most visited tours.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of most visited tours returned successfully"),
-            @ApiResponse(responseCode = "404", description = "No tours found", content = @Content),
-    })
-    @GetMapping("/most-visited")
-    public ResponseEntity<List<TourListDto>> getMostVisitedTours() {
-        List<TourListDto> tours = tourService.findMostVisitedTours();
-        return ResponseEntity.ok(tours);
-    }
-
-    @Hidden
-    @Operation(summary = "Get popular tours", description = "Fetches a list of the most popular tours")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TourListDto.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = @Content)
-    })
-    @GetMapping("/popular")
-    public ResponseEntity<List<TourListDto>> getPopularTours() {
-        List<TourListDto> tours = tourService.findPopularTours();
-        return ResponseEntity.ok(tours);
-    }
-
-    @Hidden
-    @Operation(summary = "Get featured tours", description = "Fetches a list of the featured tours")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TourListDto.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error",
-                    content = @Content)
-    })
-    @GetMapping("/featured")
-    public ResponseEntity<List<TourListDto>> getFeaturedTours() {
-        List<TourListDto> tours = tourService.findFeaturedTours();
-        return ResponseEntity.ok(tours);
-    }
-
 
     @Operation(summary = "Get tours by category", description = "Retrieve a list of tours based on the specified category.")
     @ApiResponses(value = {
@@ -159,6 +75,90 @@ public class TourController {
                 return ResponseEntity.badRequest().build();
         }
 
+        return ResponseEntity.ok(tours);
+    }
+
+    @Operation(summary = "Get tour by ID", description = "Get tour details based on the provided tour ID.")
+    @GetMapping("/{id}")
+    public ResponseEntity<TourDto> getTourById(
+            @Parameter(description = "ID of the tour to be obtained. Cannot be empty.", example = "1") @PathVariable Long id) {
+        Optional<TourDto> customerDto = tourService.getTourById(id);
+        return customerDto.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Hidden
+    @Operation(summary = "Get all tours", description = "Retrieve a list of all tours")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list"),
+            @ApiResponse(responseCode = "401", description = "Not authorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+    })
+    @GetMapping
+    public ResponseEntity<List<TourListDto>> getAllTours() {
+        List<TourListDto> tours = tourService.getAllTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Hidden
+    @Operation(summary = "Get tours by continent", description = "Retrieve a list of tours based on the specified continent.")
+    @GetMapping("/by-continent/{continent}")
+    public ResponseEntity<List<TourListDto>> getToursByContinent(
+            @Parameter(description = "Continent name to filter tours by.", example = "EUROPE", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Continent.class)) @PathVariable Continent continent) {
+        List<TourListDto> tours = tourService.findToursByContinent(continent);
+        return ResponseEntity.ok(tours);
+    }
+
+    @Hidden
+    @Operation(summary = "Get Recommended Tours by Current Season",
+            description = "Retrieves a list of recommended tours based on the current season.")
+    @ApiResponse(responseCode = "200", description = "Successful operation, returns a list of tours.")
+    @GetMapping("/recommended")
+    public ResponseEntity<List<TourListDto>> getRecommendedToursByCurrentSeason() {
+        List<TourListDto> tours = tourService.findRecommendedToursByCurrentSeason();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Hidden
+    @Operation(summary = "Get most visited tours", description = "Retrieve a list of the most visited tours.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of most visited tours returned successfully"),
+            @ApiResponse(responseCode = "404", description = "No tours found", content = @Content),
+    })
+    @GetMapping("/most-visited")
+    public ResponseEntity<List<TourListDto>> getMostVisitedTours() {
+        List<TourListDto> tours = tourService.findMostVisitedTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Hidden
+    @Operation(summary = "Get popular tours", description = "Fetches a list of the most popular tours")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourListDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @GetMapping("/popular")
+    public ResponseEntity<List<TourListDto>> getPopularTours() {
+        List<TourListDto> tours = tourService.findPopularTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @Hidden
+    @Operation(summary = "Get featured tours", description = "Fetches a list of the featured tours")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourListDto.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @GetMapping("/featured")
+    public ResponseEntity<List<TourListDto>> getFeaturedTours() {
+        List<TourListDto> tours = tourService.findFeaturedTours();
         return ResponseEntity.ok(tours);
     }
 }

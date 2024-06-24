@@ -1,6 +1,5 @@
 package com.neotour.controller;
 
-import com.cloudinary.utils.ObjectUtils;
 import com.neotour.dto.ImageDto;
 import com.neotour.entity.Image;
 import com.neotour.service.ImageService;
@@ -15,9 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/images")
@@ -46,7 +43,7 @@ public class ImageController {
     })
     @GetMapping("/downloadFromCloudinary")
     public ResponseEntity<List<ImageDto>> downloadImagesFromCloudinary(
-        @Parameter(description = "Path of the folder in Cloudinary to download images from") @RequestParam("folder") String folder){
+            @Parameter(description = "Path of the folder in Cloudinary to download images from") @RequestParam("folder") String folder) {
         List<ImageDto> imageDtos = imageService.downloadImagesFromCloudinary(folder);
         return ResponseEntity.ok(imageDtos);
     }

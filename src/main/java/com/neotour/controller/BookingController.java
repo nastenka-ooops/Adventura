@@ -2,7 +2,6 @@ package com.neotour.controller;
 
 import com.neotour.dto.BookingDto;
 import com.neotour.dto.CreateBookingDto;
-import com.neotour.dto.ReviewDto;
 import com.neotour.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +31,7 @@ public class BookingController {
             @ApiResponse(responseCode = "200", description = "Booking created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
     })
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<BookingDto> createBooking(@RequestBody CreateBookingDto bookingDto) {
         return ResponseEntity.ok(bookingService.createBooking(getCurrentUser(), bookingDto));
     }

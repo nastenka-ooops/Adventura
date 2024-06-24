@@ -2,8 +2,8 @@ package com.neotour.service;
 
 import com.neotour.dto.TourDto;
 import com.neotour.dto.TourListDto;
-import com.neotour.enums.Continent;
 import com.neotour.entity.Tour;
+import com.neotour.enums.Continent;
 import com.neotour.enums.Season;
 import com.neotour.error.TourNotFoundException;
 import com.neotour.error.TourSaveException;
@@ -37,13 +37,13 @@ public class TourService {
         if (tour.isEmpty()) {
             throw new TourNotFoundException("Tour not found with ID: " + id);
         }
-            Tour tourEntity = tour.get();
-            tourEntity.setVisitedAmount(tourEntity.getVisitedAmount() + 1);
-            try {
-                tourRepository.save(tourEntity);
-            } catch (Exception ex) {
-                throw new TourSaveException("Failed to update tour with ID: " + id, ex);
-            }
+        Tour tourEntity = tour.get();
+        tourEntity.setVisitedAmount(tourEntity.getVisitedAmount() + 1);
+        try {
+            tourRepository.save(tourEntity);
+        } catch (Exception ex) {
+            throw new TourSaveException("Failed to update tour with ID: " + id, ex);
+        }
         return tour.map(TourMapper::mapToTourDto);
     }
 

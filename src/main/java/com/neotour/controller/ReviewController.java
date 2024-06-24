@@ -2,7 +2,6 @@ package com.neotour.controller;
 
 import com.neotour.dto.CreateReviewDto;
 import com.neotour.dto.ReviewDto;
-import com.neotour.dto.TourListDto;
 import com.neotour.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,7 +34,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "400", description = "Bad request, the review could not be created",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping()
+    @PostMapping("/add")
     public ResponseEntity<ReviewDto> createReview(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Data for the new review",
                     required = true, content = @Content(schema = @Schema(implementation = CreateReviewDto.class)))
@@ -49,7 +48,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "List of reviews returned successfully"),
             @ApiResponse(responseCode = "404", description = "Tour ID not found", content = @Content)
     })
-    @GetMapping("/reviews/tour/{tourId}")
+    @GetMapping("/by-tour/{tourId}")
     public ResponseEntity<List<ReviewDto>> getReviewsByTourId(
             @Parameter(description = "ID of the tour to fetch reviews for", example = "123") @PathVariable Long tourId) {
         List<ReviewDto> reviews = reviewService.getReviewsByTourId(tourId);

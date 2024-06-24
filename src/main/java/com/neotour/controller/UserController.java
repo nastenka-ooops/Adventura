@@ -11,7 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -35,7 +38,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = @Content(mediaType = "application/json"))
     })
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<UserDto> createUser(
             @Parameter(
                     description = "JSON representation of the user to be created",
@@ -46,7 +49,7 @@ public class UserController {
                     description = "Optional profile picture for the user",
                     content = @Content(mediaType = "image/jpeg")
             )
-            @RequestPart(name = "file", required = false) MultipartFile file){
+            @RequestPart(name = "file", required = false) MultipartFile file) {
         return ResponseEntity.ok(userService.createUser(userDto, file));
     }
 }

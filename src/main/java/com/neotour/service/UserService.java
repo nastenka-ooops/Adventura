@@ -50,11 +50,11 @@ public class UserService {
             throw new IllegalArgumentException("Invalid JSON format for UserDto");
         }
         AppUser user = new AppUser(userDto.getUsername(),
-                                   bCryptPasswordEncoder.encode(userDto.getPassword()),
-                                   new HashSet<>(),
-                                   new ArrayList<>(),
-                                   new ArrayList<>(),
-                                   new ArrayList<>());
+                bCryptPasswordEncoder.encode(userDto.getPassword()),
+                new HashSet<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
 
         if (file != null) {
             try {
@@ -69,7 +69,7 @@ public class UserService {
 
         AppUser savedUser;
         try {
-             savedUser = userRepository.save(user);
+            savedUser = userRepository.save(user);
         } catch (Exception e) {
             throw new UserCreationException("Failed to create user");
         }

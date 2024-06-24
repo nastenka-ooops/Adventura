@@ -51,7 +51,7 @@ public class ReviewService {
             review.setTour(tour.get());
             Review savedReview = reviewRepository.save(review);
             return ReviewMapper.mapToReviewDto(savedReview);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ReviewCreationException("Failed to create review", e);
         }
     }

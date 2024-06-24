@@ -16,7 +16,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig{
+public class WebSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {

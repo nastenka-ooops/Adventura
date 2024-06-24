@@ -7,7 +7,6 @@ import com.neotour.entity.Image;
 import com.neotour.error.ImageRetrievalException;
 import com.neotour.error.ImageUploadException;
 import com.neotour.mapper.ImageMapper;
-import com.neotour.mapper.TourListMapper;
 import com.neotour.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +69,7 @@ public class ImageService {
         List<ImageDto> imageDTOs = new ArrayList<>();
         try {
             Map options = ObjectUtils.asMap(
-                     "type", "upload",
+                    "type", "upload",
                     "prefix", folder,
                     "max_results", 100
             );

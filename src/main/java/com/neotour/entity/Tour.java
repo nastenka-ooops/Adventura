@@ -32,7 +32,7 @@ public class Tour {
     @OneToMany
     @JoinTable(
             name = "tour_image",
-            joinColumns = @JoinColumn (name = "tour_id"),
+            joinColumns = @JoinColumn(name = "tour_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id")
     )
     private List<Image> images;

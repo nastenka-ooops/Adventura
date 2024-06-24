@@ -10,13 +10,13 @@ create table location
 );
 create table tour
 (
-    id            integer generated always as identity
+    id                 integer generated always as identity
         constraint tour_pk
             primary key,
-    name          varchar(255) not null,
-    description   text         not null,
-    booked_amount integer      not null,
-    location_id   integer      not null
+    name               varchar(255)      not null,
+    description        text              not null,
+    booked_amount      integer           not null,
+    location_id        integer           not null
         constraint tour_location_id_fk
             references location,
     recommended_season integer default 2 not null
