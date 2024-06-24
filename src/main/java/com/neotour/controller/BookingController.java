@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,10 +32,6 @@ public class BookingController {
     })
     @PostMapping("/add")
     public ResponseEntity<BookingDto> createBooking(@RequestBody CreateBookingDto bookingDto) {
-        return ResponseEntity.ok(bookingService.createBooking(getCurrentUser(), bookingDto));
-    }
-
-    private static String getCurrentUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(bookingService.createBooking(bookingDto));
     }
 }

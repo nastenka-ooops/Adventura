@@ -39,7 +39,7 @@ public class ReviewController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Data for the new review",
                     required = true, content = @Content(schema = @Schema(implementation = CreateReviewDto.class)))
             @RequestBody CreateReviewDto reviewDto) {
-        return ResponseEntity.ok(reviewService.createReview(getCurrentUser(), reviewDto));
+        return ResponseEntity.ok(reviewService.createReview(reviewDto));
     }
 
 
@@ -53,9 +53,5 @@ public class ReviewController {
             @Parameter(description = "ID of the tour to fetch reviews for", example = "123") @PathVariable Long tourId) {
         List<ReviewDto> reviews = reviewService.getReviewsByTourId(tourId);
         return ResponseEntity.ok(reviews);
-    }
-
-    private static String getCurrentUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
