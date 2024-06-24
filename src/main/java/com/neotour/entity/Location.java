@@ -22,6 +22,15 @@ public class Location {
     @OneToMany(mappedBy = "location")
     private List<Tour> tours;
 
+    public Location(String location, String country, Continent continent) {
+        this.location = location;
+        this.country = country;
+        this.continent = continent;
+    }
+
+    public Location() {
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,13 +1,17 @@
 create database neo_tour;
 create table location
 (
-    id        integer generated always as identity
+    id        bigint generated always as identity
         constraint location_pk
             primary key,
-    location  varchar(255) not null,
+    location  varchar(255) not null
+        constraint location_name_pk
+            unique,
     country   varchar(255) not null,
-    continent integer      not null
+    continent smallint     not null
 );
+create index location_continent_index
+    on location (location);
 create table tour
 (
     id                 integer generated always as identity

@@ -1,5 +1,6 @@
 package com.neotour.controller;
 
+import com.neotour.dto.CreateTourDto;
 import com.neotour.dto.TourDto;
 import com.neotour.dto.TourListDto;
 import com.neotour.enums.Continent;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +78,51 @@ public class TourController {
         }
 
         return ResponseEntity.ok(tours);
+    }
+
+    @Operation(summary = "Update tour's featured status", description = "Updates the is_featured field for a specified tour.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tour updated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourDto.class))),
+            @ApiResponse(responseCode = "404", description = "Tour not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @PutMapping("/{id}/feature")
+    public ResponseEntity<TourDto> updateFeaturedStatus(
+            @Parameter(description = "ID of the tour to be updated", example = "1")
+            @PathVariable Long id,
+            @Parameter(description = "Desired value of is_featured (true/false)", example = "true")
+            @RequestParam boolean isFeatured) {
+        TourDto updatedTour = tourService.updateIsFeatured(id, isFeatured);
+        return ResponseEntity.ok(updatedTour);
+    }
+
+    @Operation(
+            summary = "Create a new tour",
+            description = "Creates a new tour with the provided details and file."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tour created successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TourDto.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
+    @PostMapping("/add")
+    public ResponseEntity<TourDto> createTour(
+            @RequestPart(name = "tour") @Parameter(description = "JSON string representing the tour details",
+                    schema = @Schema(implementation = CreateTourDto.class))
+            String createTourDto,
+            @RequestPart(name = "file") @Parameter(description = "File to be uploaded along with the tour details")
+            MultipartFile file) {
+        return ResponseEntity.ok(tourService.createTour(createTourDto, file));
     }
 
     @Operation(summary = "Get tour by ID", description = "Get tour details based on the provided tour ID.")
