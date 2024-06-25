@@ -1,39 +1,70 @@
 package com.neotour.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neotour.dto.*;
+import com.neotour.dto.LoginRequest;
+import com.neotour.dto.LoginResponse;
+import com.neotour.dto.RegistrationRequest;
+import com.neotour.dto.RegistrationResponse;
 import com.neotour.service.AuthenticationService;
-import com.neotour.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.StringToClassMapItem;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final UserService userService;
 
-    public AuthenticationController(AuthenticationService authenticationService, UserService userService) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.userService = userService;
-
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<UserDto> register(@RequestPart("user") String userDto,
-                                            @RequestPart(value = "file", required = false) MultipartFile file) {
-
-        return ResponseEntity.ok(userService.createUser(userDto, file));
-    }
-
-
+    @Operation(
+            summary = "Login",
+            description = "Authenticate user and get access token", tags = {"authentication", "post"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User authenticated successfully"),
+                    @ApiResponse(responseCode = "401", description = "Invalid username or password", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Not enabled", content = @Content),
+            }
+    )
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        return authenticationService.login(request);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @Operation(
+            summary = "Register a new user",
+            description = "Registers a new user with optional profile picture upload"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful registration", content = @Content(schema = @Schema(implementation = RegistrationResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(
+                    mediaType = "multipart/form-data",
+                    schema = @Schema(
+                            type = "object",
+                            description = "User data in JSON format with not required user photo",
+                            properties = {
+                                    @StringToClassMapItem(key = "user", value = RegistrationRequest.class),
+                                    @StringToClassMapItem(key = "file", value = MultipartFile.class),
+                            }
+                    )
+            )
+    )
+    @PostMapping("/registration")
+    public ResponseEntity<RegistrationResponse> register(
+            @RequestPart(name = "user") String userDto,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        return ResponseEntity.ok(authenticationService.registration(userDto, file));
     }
 }

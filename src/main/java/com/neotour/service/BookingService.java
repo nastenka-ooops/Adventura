@@ -38,7 +38,7 @@ public class BookingService {
 
         Booking booking = new Booking();
 
-        Optional<AppUser> userOptional = userRepository.findByUsername(username);
+        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(username);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException("User with username " + username + " not found");
         }

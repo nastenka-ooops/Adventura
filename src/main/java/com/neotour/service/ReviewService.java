@@ -37,7 +37,7 @@ public class ReviewService {
         String username = getCurrentUser();
 
         try {
-            Optional<AppUser> user = userRepository.findByUsername(username);
+            Optional<AppUser> user = userRepository.findByUsernameIgnoreCase(username);
             Optional<Tour> tour = tourRepository.findById(reviewDto.tourId());
 
             if (user.isEmpty()) {

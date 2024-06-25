@@ -72,12 +72,6 @@ public class WebSecurityConfig {
                         .requestMatchers(GET, "/**").permitAll()
                         .requestMatchers(POST, "/api/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(PUT, "/api/**").hasAnyRole("USER", "ADMIN")
-                        /*
-                            .requestMatchers(POST, "/api/tours").hasRole("ADMIN")
-                            .requestMatchers("/api/bookings**").hasAnyRole("USER", "ADMIN")
-                            .requestMatchers("/api/users").hasAnyRole("USER", "ADMIN")
-                            .requestMatchers(POST, "/api/reviews").hasAnyRole("USER", "ADMIN")
-                            .anyRequest().hasRole("ADMIN")*/
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter())))

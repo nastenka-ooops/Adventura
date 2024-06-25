@@ -9,16 +9,16 @@ public class UserMapper {
                 user.getImages().stream().map(ImageMapper::mapToImageDto).toList());
     }
 
-    /*public static AppUser mapToUserEntity(UserDto userDto) {
-        AppUser appUser = new AppUser(
+    public static AppUser mapToUserEntity(UserDto userDto) {
+        return new AppUser(
+/*
                 userDto.getUsername(),
                 userDto.getPassword(),
-                //userDto.getRoles() != null ? new HashSet<>(userDto.getRoles()) : new HashSet<>(),
+                userDto.getRoles() != null ? new HashSet<>(userDto.getRoles()) : new HashSet<>(),
                 userDto.getImages() != null ? new ArrayList<>(userDto.getImages()) : new ArrayList<>(),
-                //userDto.getBookings() != null ? new ArrayList<>(userDto.getBookings()) : new ArrayList<>(),
-                //userDto.getReviews() != null ? new ArrayList<>(userDto.getReviews()) : new ArrayList<>()
+                userDto.getBookings() != null ? new ArrayList<>(userDto.getBookings()) : new ArrayList<>(),
+                userDto.getReviews() != null ? new ArrayList<>(userDto.getReviews()) : new ArrayList<>()
+*/
         );
-
-        return appUser;
-    }*/
+    }
 }
