@@ -1,5 +1,11 @@
 package com.neotour.config;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,14 +15,29 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    private final RSAKeyProperties keys;
+
+    public WebSecurityConfig(RSAKeyProperties keys) {
+        this.keys = keys;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,26 +65,45 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                //.requestMatchers("/","/welcome", "/login", "/register").anonymous()
-                                //.requestMatchers("/admin/**").hasAuthority("ADMIN")
-                                .anyRequest().permitAll());
-                /*.formLogin(form ->
-                        form
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/home")
-                                .permitAll()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("api/registration", "/api/login").anonymous()
+                        .requestMatchers(GET, "/**").permitAll()
+                        .requestMatchers(POST, "/api/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(PUT, "/api/**").hasAnyRole("USER", "ADMIN")
                 )
-                .logout(logout ->
-                        logout
-                                .clearAuthentication(true)
-                                .logoutSuccessUrl("/welcome")
-                                .permitAll()
-                                );
-                                */
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(converter())))
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .logout(logout -> logout.logoutUrl("/v1/logout")
+                        .clearAuthentication(true)
+                        .invalidateHttpSession(true)
+                        .permitAll());
+
         return http.build();
+
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder() {
+        JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
+        JWKSource<SecurityContext> source = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(source);
+    }
+
+    @Bean
+    public JwtAuthenticationConverter converter() {
+        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
+        converter.setAuthoritiesClaimName("roles");
+        converter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
+        return jwtConverter;
     }
 }

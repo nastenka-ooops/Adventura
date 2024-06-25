@@ -14,6 +14,7 @@ import com.neotour.repository.BookingRepository;
 import com.neotour.repository.TourRepository;
 import com.neotour.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,10 +33,12 @@ public class BookingService {
         this.tourRepository = tourRepository;
     }
 
-    public BookingDto createBooking(String username, CreateBookingDto bookingDto) {
+    public BookingDto createBooking(CreateBookingDto bookingDto) {
+        String username = getCurrentUser();
+
         Booking booking = new Booking();
 
-        Optional<AppUser> userOptional = userRepository.findByUsername(username);
+        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(username);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException("User with username " + username + " not found");
         }
@@ -68,6 +71,10 @@ public class BookingService {
         }
 
         return BookingMapper.mapToBookingDto(savedBooking);
+    }
+
+    private static String getCurrentUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
 

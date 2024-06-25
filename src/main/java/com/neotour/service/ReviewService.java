@@ -13,6 +13,7 @@ import com.neotour.repository.ReviewRepository;
 import com.neotour.repository.TourRepository;
 import com.neotour.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +33,11 @@ public class ReviewService {
         this.tourRepository = tourRepository;
     }
 
-    public ReviewDto createReview(String username, CreateReviewDto reviewDto) {
+    public ReviewDto createReview(CreateReviewDto reviewDto) {
+        String username = getCurrentUser();
+
         try {
-            Optional<AppUser> user = userRepository.findByUsername(username);
+            Optional<AppUser> user = userRepository.findByUsernameIgnoreCase(username);
             Optional<Tour> tour = tourRepository.findById(reviewDto.tourId());
 
             if (user.isEmpty()) {
@@ -43,7 +46,6 @@ public class ReviewService {
             if (tour.isEmpty()) {
                 throw new TourNotFoundException("Tour with ID " + reviewDto.tourId() + " not found");
             }
-
 
             Review review = new Review();
             review.setReview(reviewDto.review());
@@ -60,5 +62,9 @@ public class ReviewService {
         return reviewRepository.findByTourId(tourId)
                 .stream().map(ReviewMapper::mapToReviewDto)
                 .toList();
+    }
+
+    private static String getCurrentUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

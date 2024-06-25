@@ -71,7 +71,7 @@ public class UserService {
         try {
             savedUser = userRepository.save(user);
         } catch (Exception e) {
-            throw new UserCreationException("Failed to create user");
+            throw new UserCreationException("Failed to create user with this username");
         }
         return UserMapper.mapToUserDto(savedUser);
     }
