@@ -104,7 +104,7 @@ public class TourController {
 
     @Operation(
             summary = "Create a new tour",
-            description = "Creates a new tour with the provided details and file."
+            description = "Creates a new tour with the provided details and image."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Tour created successfully",
@@ -120,9 +120,9 @@ public class TourController {
             @RequestPart(name = "tour") @Parameter(description = "JSON string representing the tour details",
                     schema = @Schema(implementation = CreateTourDto.class))
             String createTourDto,
-            @RequestPart(name = "file") @Parameter(description = "File to be uploaded along with the tour details")
-            MultipartFile file) {
-        return ResponseEntity.ok(tourService.createTour(createTourDto, file));
+            @RequestPart(name = "image") @Parameter(description = "File to be uploaded along with the tour details")
+            MultipartFile image) {
+        return ResponseEntity.ok(tourService.createTour(createTourDto, image));
     }
 
     @Operation(summary = "Get tour by ID", description = "Get tour details based on the provided tour ID.")

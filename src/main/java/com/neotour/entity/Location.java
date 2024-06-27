@@ -2,11 +2,17 @@ package com.neotour.entity;
 
 import com.neotour.enums.Continent;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(name = "location")
+@Table(name = "location", indexes = {
+        @Index(name = "location_name_pk", columnList = "location"),
+        @Index(name = "location_continent_pk", columnList = "continent")})
+@Data
+@NoArgsConstructor
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,48 +32,5 @@ public class Location {
         this.location = location;
         this.country = country;
         this.continent = continent;
-    }
-
-    public Location() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Continent getContinent() {
-        return continent;
-    }
-
-    public void setContinent(Continent continent) {
-        this.continent = continent;
-    }
-
-    public List<Tour> getTours() {
-        return tours;
-    }
-
-    public void setTours(List<Tour> tours) {
-        this.tours = tours;
     }
 }

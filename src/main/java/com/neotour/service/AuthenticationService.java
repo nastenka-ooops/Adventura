@@ -8,7 +8,6 @@ import com.neotour.entity.Image;
 import com.neotour.entity.Role;
 import com.neotour.enums.RoleEnum;
 import com.neotour.error.*;
-import com.neotour.mapper.UserMapper;
 import com.neotour.repository.RoleRepository;
 import com.neotour.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -72,7 +71,7 @@ public class AuthenticationService {
         }
     }
 
-    public RegistrationResponse registration(String request, MultipartFile file) {
+    public RegistrationResponse registration(String request, MultipartFile image) {
         RegistrationRequest registrationRequest;
 
         try {
@@ -102,9 +101,9 @@ public class AuthenticationService {
                 new ArrayList<>(),
                 new ArrayList<>());
 
-        if (file != null) {
+        if (image != null) {
             try {
-                user.getImages().add(imageService.uploadImage(file));
+                user.getImages().add(imageService.uploadImage(image));
             } catch (Exception e) {
                 throw new ImageUploadException("Failed to upload image for user", e);
             }
@@ -120,7 +119,7 @@ public class AuthenticationService {
             throw new UserCreationException("Failed to create user with this username");
         }
         return new RegistrationResponse(savedUser.getFirstName(), savedUser.getLastName(), savedUser.getEmail(),
-                savedUser.getPhone(), savedUser.getUsername(),
+                savedUser.getPhoneNumber(), savedUser.getUsername(),
                 savedUser.getImages().isEmpty() ? null : savedUser.getImages().get(0).getUrl());
     }
 

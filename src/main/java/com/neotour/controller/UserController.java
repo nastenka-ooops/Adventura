@@ -49,7 +49,7 @@ public class UserController {
                     description = "Optional profile picture for the user",
                     content = @Content(mediaType = "image/jpeg")
             )
-            @RequestPart(name = "file", required = false) MultipartFile file) {
-        return ResponseEntity.ok(userService.createUser(userDto, file));
+            @RequestPart(name = "image", required = false) MultipartFile image) {
+        return ResponseEntity.ok(userService.createUser(userDto, image));
     }
 }

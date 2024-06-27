@@ -27,11 +27,11 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @Operation(summary = "Upload Image to Cloudinary", description = "Uploads an image file to Cloudinary and saves it in the database.")
+    @Operation(summary = "Upload Image to Cloudinary", description = "Uploads an image image to Cloudinary and saves it in the database.")
     @PostMapping("/upload")
     public ResponseEntity<Image> uploadImage(
-            @Parameter(description = "Image file to upload", required = true) @RequestParam("file") MultipartFile file) {
-        Image imageDto = imageService.uploadImage(file);
+            @Parameter(description = "Image file to upload", required = true) @RequestParam("image") MultipartFile image) {
+        Image imageDto = imageService.uploadImage(image);
         return ResponseEntity.ok(imageDto);
     }
 

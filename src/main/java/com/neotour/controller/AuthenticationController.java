@@ -56,7 +56,7 @@ public class AuthenticationController {
                             description = "User data in JSON format with not required user photo",
                             properties = {
                                     @StringToClassMapItem(key = "user", value = RegistrationRequest.class),
-                                    @StringToClassMapItem(key = "file", value = MultipartFile.class),
+                                    @StringToClassMapItem(key = "image", value = MultipartFile.class),
                             }
                     )
             )
@@ -64,7 +64,7 @@ public class AuthenticationController {
     @PostMapping("/registration")
     public ResponseEntity<RegistrationResponse> register(
             @RequestPart(name = "user") String userDto,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
-        return ResponseEntity.ok(authenticationService.registration(userDto, file));
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        return ResponseEntity.ok(authenticationService.registration(userDto, image));
     }
 }

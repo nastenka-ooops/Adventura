@@ -9,15 +9,11 @@ public class SeasonDetector {
     public static Season getCurrentSeason() {
         LocalDate currentDate = LocalDate.now();
         Month currentMonth = currentDate.getMonth();
-
-        if (currentMonth == Month.DECEMBER || currentMonth == Month.JANUARY || currentMonth == Month.FEBRUARY) {
-            return Season.WINTER;
-        } else if (currentMonth == Month.MARCH || currentMonth == Month.APRIL || currentMonth == Month.MAY) {
-            return Season.SPRING;
-        } else if (currentMonth == Month.JUNE || currentMonth == Month.JULY || currentMonth == Month.AUGUST) {
-            return Season.SUMMER;
-        } else {
-            return Season.AUTUMN;
-        }
+        return switch (currentMonth) {
+            case DECEMBER, JANUARY, FEBRUARY -> Season.WINTER;
+            case MARCH, APRIL, MAY -> Season.SPRING;
+            case JUNE, JULY, AUGUST -> Season.SUMMER;
+            case SEPTEMBER, OCTOBER, NOVEMBER -> Season.AUTUMN;
+        };
     }
 }
