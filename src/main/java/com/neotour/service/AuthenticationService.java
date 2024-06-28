@@ -124,7 +124,7 @@ public class AuthenticationService {
     }
 
     public boolean phoneNumberExists(String phoneNumber) {
-        return userRepository.findByPhone(phoneNumber).isPresent();
+        return userRepository.findByPhoneNumber(phoneNumber).isPresent();
     }
 
     public boolean emailExists(String email) {
