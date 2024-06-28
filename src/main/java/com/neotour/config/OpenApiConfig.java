@@ -13,7 +13,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url("https://auth-project-production.up.railway.app"))
+                .addServersItem(new Server().url("https://neotour-production-392c.up.railway.app"))
                 .info(new Info()
                         .title("NeoTour API")
                         .version("1.0")
