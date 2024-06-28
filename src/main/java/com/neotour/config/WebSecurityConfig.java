@@ -69,19 +69,15 @@ public class WebSecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/registration", "/api/login").anonymous()
+                        .requestMatchers("/api/registration", "/api/login").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
                         .requestMatchers(GET, "/api/**").permitAll()
                         .requestMatchers(POST, "/api/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(PUT, "/api/**").hasAnyRole("USER", "ADMIN")
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter())))
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .logout(logout -> logout.logoutUrl("/v1/logout")
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(true)
-                        .permitAll());
-
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
         return http.build();
 
     }
