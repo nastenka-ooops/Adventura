@@ -1,5 +1,5 @@
 # NeoTour
-Unforgettable travel experiences start with NeoTour
+### Unforgettable travel experiences start with NeoTour
 This progect was made in cooperate with frontend developer
 [NeoTour](https://neotourakunov.netlify.app/)
 
