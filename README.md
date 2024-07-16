@@ -1,11 +1,11 @@
-# NeoTour
-### Unforgettable travel experiences start with NeoTour
+# Adventura
+### Unforgettable travel experiences start with Adventura
 This progect was made in cooperate with frontend developer
-[NeoTour](https://neotourakunov.netlify.app/)
+[Adventura](https://neotourakunov.netlify.app/)
 
 ## Description
 
-NeoTour is an optimized app designed for convenient tour booking. Offering a range of categories, including a comprehensive list of tours and popular options, NeoTour provides a convenient platform for travelers. Whether exploring destinations through breathtaking photos, delving into detailed tour descriptions, or managing bookings through a query backend, NeoTour is the way to seamless and unforgettable travel experiences.
+Adventura is an optimized app designed for convenient tour booking. Offering a range of categories, including a comprehensive list of tours and popular options, Adventura provides a convenient platform for travelers. Whether exploring destinations through breathtaking photos, delving into detailed tour descriptions, or managing bookings through a query backend, Adventura is the way to seamless and unforgettable travel experiences.
 
 ## Build with
 - [Spring Boot](https://spring.io/projects/spring-boot) - Server framework
@@ -17,7 +17,7 @@ NeoTour is an optimized app designed for convenient tour booking. Offering a ran
 
 ## Entity relationship diagram
 
-![ERD](https://github.com/nastenka-ooops/NeoTour/blob/main/diagrams/ERD.png)
+![ERD](https://github.com/nastenka-ooops/Adventura/blob/main/diagrams/ERD.png)
 
 ## Installation
 
@@ -26,7 +26,7 @@ To install the application, follow these steps:
 1. Clone the repository:
    ```
    git clone https://github.com/nastenka-ooops/NeoTour.git
-   cd NeoTour
+   cd Adventura
    ```
 
 2. If you have Maven installed locally, run:
@@ -58,7 +58,7 @@ After a successful installation, set the following variables and run the applica
 
 ## How To Use
 
-Visit [NeoTour Website](https://neotourakunov.netlify.app/) to explore the site developed in collaboration with the frontend developer.
+Visit [Adventura Website](https://neotourakunov.netlify.app/) to explore the site developed in collaboration with the frontend developer.
 
 ## Documentation
 
